@@ -23,6 +23,7 @@ public class Game extends ApplicationAdapter {
     public static boolean TITLE_SCREEN = false;
 
     private SpriteBatch batch;
+    private SpriteBatch lightBatch;
 
 
     @Override
@@ -30,13 +31,15 @@ public class Game extends ApplicationAdapter {
 
         Images.loadImages();
 
+        batch = new SpriteBatch();
+        lightBatch = new SpriteBatch();
+
         physics = new Physics();
         lighting = new Lighting(physics);
         renderer = new Renderer(physics, lighting);
         sound = new SoundHandler();
 //        sound.play("sounds/song1.mp3", true);
 
-        batch = new SpriteBatch();
 
 
     }
@@ -55,27 +58,19 @@ public class Game extends ApplicationAdapter {
             batch.end();
         }
         else{
-            renderer.render(physics.getWorld());
-			physics.render(renderer.getCam());
-            lighting.render(renderer.getCam());
+
+
+
+            batch.begin();
+            renderer.render(physics.getWorld(), batch);
+            batch.end();
+
+            lighting.render(batch);
+            physics.render(batch);
+
             physics.doPhysicsStep(Gdx.graphics.getDeltaTime());
         }
 
-    }
-
-    @Override
-    public void resize(int width, int height){
-
-        batch.getProjectionMatrix().setToOrtho2D(0, 0, width, height);
-
-        if(width < 640){
-            Gdx.graphics.setWindowedMode(640, Gdx.graphics.getHeight());
-        }
-        if(height < 480){
-            Gdx.graphics.setWindowedMode(Gdx.graphics.getWidth(), 480);
-        }
-
-        renderer.setCamBounds(width, height);
     }
 
 }

@@ -12,7 +12,8 @@ public class Logic {
     private Player player;
 
     public Logic(World world, Lighting lighting){
-        player = new Player(true, 10, 10, 25, 25, world, lighting, false, Images.IPL, false);
+        player = new Player(true, 600, 400, 25, 25, world, lighting, false, Images.bad, false);
+        Renderer.entities.add(player);
 
     }
 
@@ -20,8 +21,6 @@ public class Logic {
 
     public void update(World world){
 
-        System.out.println(player.getLoc());
-        player.update();
     }
 
 }

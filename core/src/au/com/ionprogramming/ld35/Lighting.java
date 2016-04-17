@@ -5,6 +5,7 @@ import box2dLight.PointLight;
 import box2dLight.RayHandler;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -33,11 +34,11 @@ public class Lighting {
 
 
 //
-//        addPointLight(10, 10, 30, new Color(1,0,0,1), true, phys.getWorld());
+        addPointLight(10, 10, 30, new Color(1,0,0,1), true, phys.getWorld());
 //
-//        addPointLight(40, 25, 30, new Color(0,1,0,1), true, phys.getWorld());
+        addPointLight(40, 25, 30, new Color(0,1,0,1), true, phys.getWorld());
 //
-//        addPointLight(20, 15, 30, new Color(0,0,1,1), true, phys.getWorld());
+        addPointLight(20, 15, 30, new Color(0,0,1,1), true, phys.getWorld());
 //
 //        addPointLight(2, 45, 30, new Color(61, 0, 142, 255), true, phys.getWorld());
          d = new DirectionalLight(rayHandler, 512, new Color(1f, 0.2f, 0.6f, 0.3f), 300);
@@ -47,11 +48,8 @@ public class Lighting {
 
     }
 
-    public void render(OrthographicCamera cam){
-
-
-
-        rayHandler.setCombinedMatrix(cam.combined);
+    public void render(SpriteBatch b){
+        rayHandler.setCombinedMatrix(b.getProjectionMatrix().mul(b.getTransformMatrix()));
         rayHandler.updateAndRender();
     }
 

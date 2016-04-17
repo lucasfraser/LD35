@@ -24,7 +24,7 @@ public abstract class Entity {
 
 	protected Sound sound;
 
-    public Entity(boolean moving, float x, float y, float width, float height, World world, Lighting lighting, boolean lockRotation, Texture texture, boolean rounded){
+    public Entity(boolean moving, float x, float y, float width, float height, World world, Lighting lighting, Texture texture, boolean rounded){
 
 		tex = texture;
 
@@ -48,7 +48,6 @@ public abstract class Entity {
 		BodyDef bodyDef = new BodyDef();
 
 		bodyDef.position.set(loc.x + width/2 , loc.y + height / 2);
-		bodyDef.fixedRotation = lockRotation;
 
         if(moving){
 		    bodyDef.type = BodyDef.BodyType.DynamicBody;
@@ -79,27 +78,13 @@ public abstract class Entity {
 		shape.dispose();
     }
 
-	public void setSound(String soundFile){
-		sound = Gdx.audio.newSound(Gdx.files.internal(soundFile));
-	}
-
-	public void playSound(){
-		sound.play();
-	}
 
 	public void update(){
         loc = body.getPosition();
 	}
 
-	public void render(ShapeRenderer r, SpriteBatch batch){
-		batch.draw(tex, body.getPosition().x - size.x / 2, body.getPosition().y - size.y / 2, size.x, size.y, 0, 0, 16, 16, flipX, flipY);
-	}
-
-
-	private void stopSound(){
-		if(sound != null) {
-			sound.stop();
-		}
+	public void render(SpriteBatch batch){
+		batch.draw(tex, body.getPosition().x - size.x / 2, body.getPosition().y - size.y / 2);
 	}
 
 

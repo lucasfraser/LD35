@@ -1,6 +1,7 @@
 package au.com.ionprogramming.ld35;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
@@ -17,8 +18,8 @@ public class Physics {
         debugRenderer = new Box2DDebugRenderer();
     }
 
-    public void render(OrthographicCamera cam){
-        debugRenderer.render(world, cam.combined);
+    public void render(SpriteBatch b){
+        debugRenderer.render(world, b.getProjectionMatrix());
     }
 
     public void doPhysicsStep(float deltaTime) {
