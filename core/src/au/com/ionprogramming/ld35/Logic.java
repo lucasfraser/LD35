@@ -12,7 +12,7 @@ public class Logic {
     private Player player;
 
     public Logic(World world, Lighting lighting){
-        player = new Player(true, 600, 400, 25, 25, world, lighting, false, Images.bad, false);
+        player = new Player(true, 600, 400, 64, 64, world, lighting, false, Images.forklift, false);
         Renderer.entities.add(player);
 
     }

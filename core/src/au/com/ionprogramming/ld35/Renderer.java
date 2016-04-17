@@ -11,10 +11,7 @@ public class Renderer {
 
     public static ArrayList<Entity> entities = new ArrayList<Entity>();
 
-    private Logic logic;
-
     public Renderer(Physics physics, Lighting lighting){
-        logic = new Logic(physics.getWorld(), lighting);
     }
 
     public void render(World world, SpriteBatch b){
@@ -26,8 +23,6 @@ public class Renderer {
                 entities.get(i).update();
                 entities.get(i).render(b);
             }
-
-        logic.update(world);
 
     }
 

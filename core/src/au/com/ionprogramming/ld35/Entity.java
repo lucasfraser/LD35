@@ -34,7 +34,7 @@ public abstract class Entity {
 
 		PolygonShape shape = new PolygonShape();
         if(moving){
-            shape.setAsBox(size.x / 2 - 0.1f*size.x, size.y / 2 - 0.1f*size.y);
+            shape.setAsBox(size.x / 2 - 0.01f*size.x, size.y / 2 - 0.01f*size.y);
         }
         else {
             shape.setAsBox(size.x / 2, size.y / 2);

@@ -26,6 +26,8 @@ public class Lighting {
 
     private DirectionalLight d;
 
+    private PointLight forkLight;
+
     public Lighting(Physics phys){
 
         rayHandler = new RayHandler(phys.getWorld());
@@ -39,6 +41,8 @@ public class Lighting {
         addPointLight(40, 25, 30, new Color(0,1,0,1), true, phys.getWorld());
 //
         addPointLight(20, 15, 30, new Color(0,0,1,1), true, phys.getWorld());
+
+        forkLight = new PointLight(rayHandler, 256, Color.ORANGE, 50, 0, 0);
 //
 //        addPointLight(2, 45, 30, new Color(61, 0, 142, 255), true, phys.getWorld());
          d = new DirectionalLight(rayHandler, 512, new Color(1f, 0.2f, 0.6f, 0.3f), 300);
@@ -48,7 +52,22 @@ public class Lighting {
 
     }
 
-    public void render(SpriteBatch b){
+    int blinkTime = 0;
+    int blinkOffset = 20;
+    boolean on = true;
+    public void render(SpriteBatch b, Logic l){
+        blinkTime++;
+        if(blinkTime > blinkOffset){
+            on = !on;
+            blinkTime = 0;
+        }
+        if(on){
+            forkLight.setColor(Color.ORANGE);
+        }
+        else{
+            forkLight.setColor(0, 0, 0, 0);
+        }
+        forkLight.setPosition(l.getPlayer().getLoc().x, l.getPlayer().getLoc().y + 30);
         rayHandler.setCombinedMatrix(b.getProjectionMatrix().mul(b.getTransformMatrix()));
         rayHandler.updateAndRender();
     }

@@ -18,8 +18,9 @@ public class Game extends ApplicationAdapter {
     private Renderer renderer;
     private Lighting lighting;
     private SoundHandler sound;
+    private Logic logic;
 
-    public static boolean INTRO = true;
+    public static boolean INTRO = false;
     public static boolean TITLE_SCREEN = false;
 
     private SpriteBatch batch;
@@ -32,10 +33,10 @@ public class Game extends ApplicationAdapter {
         Images.loadImages();
 
         batch = new SpriteBatch();
-        lightBatch = new SpriteBatch();
 
         physics = new Physics();
         lighting = new Lighting(physics);
+        logic = new Logic(physics.getWorld(), lighting);
         renderer = new Renderer(physics, lighting);
         sound = new SoundHandler();
 //        sound.play("sounds/song1.mp3", true);
@@ -58,15 +59,14 @@ public class Game extends ApplicationAdapter {
             batch.end();
         }
         else{
-
-
+            logic.update(physics.getWorld());
 
             batch.begin();
             renderer.render(physics.getWorld(), batch);
             batch.end();
 
-            lighting.render(batch);
-            physics.render(batch);
+            lighting.render(batch, logic);
+//            physics.render(batch);
 
             physics.doPhysicsStep(Gdx.graphics.getDeltaTime());
         }
