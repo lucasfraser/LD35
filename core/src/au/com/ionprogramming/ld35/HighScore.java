@@ -17,7 +17,7 @@ public class HighScore {
         String url = "http://ld.ionprogramming.com.au/ld35/insertscore.php";
         URL obj = new URL(url);
         HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-            //add reuqest header
+        //add reuqest header
         con.setRequestMethod("POST");
         con.setRequestProperty("User-Agent", "Mozilla/5.0");
         con.setRequestProperty("Accept-Language", "en-US,en;q=0.5");
