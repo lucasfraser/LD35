@@ -92,6 +92,7 @@ public class Forklift {
         fixtureDefForks.density = 200f;
         fixtureDefForks.friction = 1000f;
         fixtureDefForks.restitution = 0.01f;
+        fixtureDefForks.filter.categoryBits = 0x0004; //i am a fork
         fixtureDefForks.filter.maskBits = 0x0002;//i will collide with triangles
 
 		body = world.createBody(bodyDef);
@@ -207,13 +208,5 @@ public class Forklift {
 	public Body getBody() {
 		return body;
 	}
-
-    public void lose(){
-        try {
-			HighScore.addScore(System.getProperty("user.name"), Game.level+Game.levelPercent);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-    }
 
 }

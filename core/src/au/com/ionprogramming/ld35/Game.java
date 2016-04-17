@@ -6,6 +6,8 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
+import java.io.IOException;
+
 
 public class Game extends ApplicationAdapter {
 
@@ -47,6 +49,7 @@ public class Game extends ApplicationAdapter {
 
     public static void initLevel(){
         physics = new Physics();
+        physics.getWorld().setContactListener(new DropBall());
         lighting = new Lighting(physics);
         logic = new Logic(physics.getWorld(), lighting);
         renderer = new Renderer(physics, lighting);
@@ -89,6 +92,16 @@ public class Game extends ApplicationAdapter {
 
             physics.doPhysicsStep(Gdx.graphics.getDeltaTime());
         }
+    }
+
+
+    public static void lose(){
+        try {
+            HighScore.addScore(System.getProperty("user.name"), Game.level+Game.levelPercent);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        initLevel();
     }
 
 }
