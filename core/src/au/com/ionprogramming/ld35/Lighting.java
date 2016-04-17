@@ -67,7 +67,7 @@ public class Lighting {
         else{
             forkLight.setColor(0, 0, 0, 0);
         }
-        forkLight.setPosition(l.getPlayer().getLoc().x, l.getPlayer().getLoc().y + 30);
+        forkLight.setPosition(l.getPlayer().getLoc().x + 30*(float)Math.cos(l.getPlayer().getBody().getAngle()+Math.PI/2), l.getPlayer().getLoc().y + 30*(float)Math.sin(l.getPlayer().getBody().getAngle()+Math.PI/2));
         rayHandler.setCombinedMatrix(b.getProjectionMatrix().mul(b.getTransformMatrix()));
         rayHandler.updateAndRender();
     }

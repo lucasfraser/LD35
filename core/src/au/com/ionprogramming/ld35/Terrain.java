@@ -17,6 +17,11 @@ public class Terrain {
         shapeRenderer = new ShapeRenderer();
         noise = new SimplexNoise(5, 0.5f, 0.01f);
         terrainPoints = noise.generateLevelPoints(100, Gdx.graphics.getWidth(), 400);
+        FixtureDef fixtureDefl = new FixtureDef();
+        fixtureDefl.density =10f;
+        fixtureDefl.friction = 100f;
+        fixtureDefl.restitution = 0.01f;
+
         for(int x = 0; x < 99; x++){
             PolygonShape p = new PolygonShape();
             p.set(new float[]{terrainPoints[x*2], terrainPoints[x*2 + 1], terrainPoints[x*2 + 2], terrainPoints[x*2 + 3],
@@ -26,7 +31,11 @@ public class Terrain {
             bodyDef.position.set(0, 0);
             bodyDef.type = BodyDef.BodyType.StaticBody;
             Body body = world.createBody(bodyDef);
-            body.createFixture(p, 0.0f);
+
+            fixtureDefl.shape = p;
+
+            body.createFixture(fixtureDefl);
+
 
             p.dispose();
         }

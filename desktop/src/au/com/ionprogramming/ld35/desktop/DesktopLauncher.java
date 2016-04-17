@@ -10,6 +10,7 @@ public class DesktopLauncher {
 		config.width = 1200;
 		config.height = 650;
 		config.resizable = false;
+		config.title = "Shape Lifter";
 		new LwjglApplication(new Game(), config);
 	}
 }

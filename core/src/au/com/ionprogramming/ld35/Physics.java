@@ -14,7 +14,7 @@ public class Physics {
     private float accumulator = 0;
 
     public Physics(){
-        world = new World(new Vector2(0, -10), true);
+        world = new World(new Vector2(0, -1000), true);
         debugRenderer = new Box2DDebugRenderer();
     }
 

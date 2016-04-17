@@ -5,22 +5,20 @@ import com.badlogic.gdx.physics.box2d.World;
 
 public class Logic {
 
-    public Player getPlayer() {
+    public Forklift getPlayer() {
         return player;
     }
 
-    private Player player;
+    private Forklift player;
 
     public Logic(World world, Lighting lighting){
-        player = new Player(true, 600, 400, 64, 64, world, lighting, false, Images.forklift, false);
-        Renderer.entities.add(player);
-
+        player = new Forklift(600, 400, 64, 64, world, lighting, Images.forkliftRegion);
     }
 
 
 
     public void update(World world){
-
+        player.update();
     }
 
 }

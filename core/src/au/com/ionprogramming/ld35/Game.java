@@ -71,7 +71,7 @@ public class Game extends ApplicationAdapter {
             logic.update(physics.getWorld());
 
             batch.begin();
-            renderer.render(physics.getWorld(), batch);
+            renderer.render(physics.getWorld(), batch, logic);
             batch.end();
 
             lighting.render(batch, logic);
