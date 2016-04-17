@@ -16,9 +16,6 @@ public class Renderer {
 
     public void render(World world, SpriteBatch b){
 
-        Gdx.gl.glClearColor(0.1f, 0.1f, 0.1f, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
             for(int i = 0; i < entities.size(); i++){
                 entities.get(i).update();
                 entities.get(i).render(b);
