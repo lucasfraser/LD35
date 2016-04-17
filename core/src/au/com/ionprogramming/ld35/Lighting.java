@@ -34,14 +34,6 @@ public class Lighting {
 
         rayHandler.setAmbientLight(new Color(0.2f, 0.2f, 0.2f, 0.3f));
 
-
-//
-        addPointLight(10, 10, 30, new Color(1,0,0,1), true, phys.getWorld());
-//
-        addPointLight(40, 25, 30, new Color(0,1,0,1), true, phys.getWorld());
-//
-        addPointLight(20, 15, 30, new Color(0,0,1,1), true, phys.getWorld());
-
         forkLight = new PointLight(rayHandler, 256, Color.ORANGE, 50, 0, 0);
 //
 //        addPointLight(2, 45, 30, new Color(61, 0, 142, 255), true, phys.getWorld());

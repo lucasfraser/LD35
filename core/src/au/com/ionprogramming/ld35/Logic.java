@@ -12,7 +12,7 @@ public class Logic {
     private Forklift player;
 
     public Logic(World world, Lighting lighting){
-        player = new Forklift(600, 400, 64, 64, world, lighting, Images.forkliftRegion);
+        player = new Forklift(20, 500, 64, 64, world, lighting, Images.forkliftRegion);
     }
 
 

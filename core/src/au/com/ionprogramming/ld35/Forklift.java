@@ -9,6 +9,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
 
+import java.io.IOException;
+
 
 public class Forklift {
 
@@ -20,11 +22,17 @@ public class Forklift {
     protected Body bodyBack;
     protected TextureRegion tex;
     protected RevoluteJointDef revFront;
-    protected RevoluteJointDef forkJoint;
+
+    public void setForkAngle(float forkAngle) {
+        this.forkAngle = forkAngle;
+    }
+
+    protected float forkAngle;
 
 
     public Forklift(float x, float y, float width, float height, World world, Lighting lighting, TextureRegion texture){
 
+        forkAngle = 0;
 		tex = texture;
 
         loc = new Vector2(x, y);
@@ -36,7 +44,7 @@ public class Forklift {
 //		box.set(new float[]{0 - size.x/2, size.y / 6- size.y/2,   0 - size.x/2, -20/*size.y - size.y/2*/,    size.x - size.x/2, -20/*size.y- size.y/2*/,    size.x - size.x/2, size.y/6- size.y/2,     ((size.x / 6) * 5) - size.x/2, 0- size.y/2,      (size.x / 6) - size.x/2, 0- size.y/2     });
 
         PolygonShape forkShape = new PolygonShape();
-        forkShape.setAsBox(20, 2);
+        forkShape.setAsBox(15, 3, new Vector2(15, 0), 0);
 
 		CircleShape wheel = new CircleShape();
 		wheel.setRadius(width/8);
@@ -55,7 +63,9 @@ public class Forklift {
 
         BodyDef bodyDefFork = new BodyDef();
         bodyDefFork.position.set(loc.x + width/2 , loc.y + height / 2);
-        bodyDefFork.type = BodyDef.BodyType.DynamicBody;
+        bodyDefFork.type = BodyDef.BodyType.KinematicBody;
+
+//        bodyDefFork.gravityScale = 0;
 
 		FixtureDef fixtureDef = new FixtureDef();
 		fixtureDef.shape = box;
@@ -74,6 +84,7 @@ public class Forklift {
         fixtureDefForks.density = 1f;
         fixtureDefForks.friction = 100f;
         fixtureDefForks.restitution = 0.01f;
+        fixtureDefForks.filter.maskBits = 0x0000;
 
 		body = world.createBody(bodyDef);
 		bodyFront = world.createBody(bodyDefFront);
@@ -94,12 +105,16 @@ public class Forklift {
         revFront.lowerAngle = 1;
         revFront.upperAngle = 0;
 
-        forkJoint = new RevoluteJointDef();
-        forkJoint.collideConnected = false;
-        forkJoint.bodyA = body;
-        forkJoint.bodyB = forkBody;
-        forkJoint.localAnchorA.set(size.x/2+2, size.y/2-5);
-        forkJoint.localAnchorB.set(-20, 2);
+//        forkJoint = new RevoluteJointDef();
+//        forkJoint.collideConnected = false;
+//        forkJoint.bodyA = body;
+//        forkJoint.bodyB = forkBody;
+//        forkJoint.localAnchorA.set(size.x/2+2, size.y/2-5);
+//        forkJoint.localAnchorB.set(-15, 0);
+//        forkJoint.enableLimit = true;
+//        forkJoint.upperAngle = (float)Math.PI/2;
+//        forkJoint.lowerAngle = (float)-Math.PI/2;
+
 
 		RevoluteJointDef revBack = new RevoluteJointDef();
 		revBack.collideConnected = false;
@@ -110,12 +125,13 @@ public class Forklift {
 
 		world.createJoint(revFront);
         world.createJoint(revBack);
-        world.createJoint(forkJoint);
+//        world.createJoint(forkJoint);
     }
 
 
 	public void update(){
         loc = body.getPosition();
+
         if(Gdx.input.isKeyPressed(Input.Keys.A)){
             bodyFront.applyAngularImpulse(400000, true);
             bodyBack.applyAngularImpulse(400000, true);
@@ -134,12 +150,34 @@ public class Forklift {
         }
 		else{
             bodyFront.setAngularVelocity(0);
+            bodyBack.setAngularVelocity(0);
 		}
 
-	}
+        if(Gdx.input.isKeyPressed(Input.Keys.UP) && forkAngle < Math.PI/2){
+            forkAngle += 0.02f;
+        }
+        else if(Gdx.input.isKeyPressed(Input.Keys.DOWN) && forkAngle > -Math.PI/2){
+            forkAngle -= 0.02f;
+        }
+        forkBody.setTransform(body.getPosition().x + 32*(float)(Math.sqrt(2)*Math.cos(body.getAngle()+Math.PI/4)) , body.getPosition().y + 32*(float)(Math.sqrt(2)*Math.sin(body.getAngle()+Math.PI/4)), forkAngle + body.getAngle());
+
+
+        if(body.getPosition().x < 32){
+            body.setTransform(new Vector2(32, body.getPosition().y), body.getAngle());
+        }
+        else if(body.getPosition().x > Gdx.graphics.getWidth() - 32){
+            Game.level++;
+            Game.initLevel();
+        }
+
+        Game.levelPercent = (body.getPosition().x-32) / (Gdx.graphics.getWidth()-64);
+
+    }
 
 	public void render(SpriteBatch batch){
 		batch.draw(tex, body.getPosition().x - size.x / 2, body.getPosition().y - size.y / 2, 32,32, 64, 64, 1, 1, (float)Math.toDegrees(body.getAngle()));
+
+        batch.draw(Images.forksRegion, body.getPosition().x + 32*(float)(Math.sqrt(2)*Math.cos(body.getAngle()+Math.PI/4)) , body.getPosition().y + 32*(float)(Math.sqrt(2)*Math.sin(body.getAngle()+Math.PI/4)), 0, 0, 30, 6, 1, 1, (float)Math.toDegrees(forkBody.getAngle()));
 	}
 
 
@@ -150,5 +188,13 @@ public class Forklift {
 	public Body getBody() {
 		return body;
 	}
+
+    public void lose(){
+        try {
+			HighScore.addScore(System.getProperty("user.name"), Game.level+Game.levelPercent);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+    }
 
 }

@@ -4,12 +4,8 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Polygon;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
-import com.badlogic.gdx.physics.box2d.Shape;
+import com.badlogic.gdx.math.Vector2;
 
-import java.io.IOException;
 
 public class Game extends ApplicationAdapter {
 
@@ -19,18 +15,21 @@ public class Game extends ApplicationAdapter {
 //			e.printStackTrace();
 //		}
 
-    private Physics physics;
-    private Renderer renderer;
-    private Lighting lighting;
-    private SoundHandler sound;
-    private Logic logic;
+    private static Physics physics;
+    private static Renderer renderer;
+    private static Lighting lighting;
+    private static SoundHandler sound;
+    private static Logic logic;
+
+    public static int level = 1;
+    public static float levelPercent = 0;
 
     public static boolean INTRO = false;
     public static boolean TITLE_SCREEN = false;
 
     private SpriteBatch batch;
 
-    private Terrain terrain;
+    private static Terrain terrain;
 
     @Override
     public void create () {
@@ -39,16 +38,25 @@ public class Game extends ApplicationAdapter {
 
         batch = new SpriteBatch();
 
+
+
+//        sound.play("sounds/song1.mp3", true);
+        initLevel();
+
+    }
+
+    public static void initLevel(){
         physics = new Physics();
         lighting = new Lighting(physics);
         logic = new Logic(physics.getWorld(), lighting);
         renderer = new Renderer(physics, lighting);
         sound = new SoundHandler();
-//        sound.play("sounds/song1.mp3", true);
 
-        terrain = new Terrain(physics.getWorld(), 50);
+        terrain = new Terrain(physics.getWorld(), level);
+
+//        logic.getPlayer().body.setTransform(new Vector2(20, 500), 0);
+//        logic.getPlayer().setForkAngle(0);
     }
-
     @Override
     public void render () {
 
@@ -64,7 +72,7 @@ public class Game extends ApplicationAdapter {
         }
         else{
 
-            Gdx.gl.glClearColor(0.1f, 0.1f, 0.1f, 1);
+            Gdx.gl.glClearColor(0.8f, 0.1f, 0.1f, 1);
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
             terrain.render();
@@ -75,11 +83,10 @@ public class Game extends ApplicationAdapter {
             batch.end();
 
             lighting.render(batch, logic);
-            physics.render(batch);
+//            physics.render(batch);
 
             physics.doPhysicsStep(Gdx.graphics.getDeltaTime());
         }
-
     }
 
 }
