@@ -2,9 +2,12 @@ package au.com.ionprogramming.ld35;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
+
+import java.awt.*;
 
 import java.io.IOException;
 
@@ -30,6 +33,7 @@ public class Game extends ApplicationAdapter {
     public static boolean TITLE_SCREEN = false;
 
     private SpriteBatch batch;
+    private ShapeRenderer shape;
 
     private static Terrain terrain;
 
@@ -39,6 +43,7 @@ public class Game extends ApplicationAdapter {
         Images.loadImages();
 
         batch = new SpriteBatch();
+        shape = new ShapeRenderer();
 
 
 
@@ -87,8 +92,13 @@ public class Game extends ApplicationAdapter {
             renderer.render(physics.getWorld(), batch, logic);
             batch.end();
 
+            shape.begin(ShapeRenderer.ShapeType.Filled);
+            shape.setColor(com.badlogic.gdx.graphics.Color.RED);
+            logic.getPlayer().renderTri(shape);
+            shape.end();
+
             lighting.render(batch, logic);
-            physics.render(batch);
+//            physics.render(batch);
 
             physics.doPhysicsStep(Gdx.graphics.getDeltaTime());
         }

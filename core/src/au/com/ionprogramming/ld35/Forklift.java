@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
@@ -199,6 +200,12 @@ public class Forklift {
 
         batch.draw(Images.forksRegion, body.getPosition().x + 32*(float)(Math.sqrt(2)*Math.cos(body.getAngle()+Math.PI/4)) , body.getPosition().y + 32*(float)(Math.sqrt(2)*Math.sin(body.getAngle()+Math.PI/4)), 0, 0, 30, 6, 1, 1, (float)Math.toDegrees(forkBody.getAngle()));
 	}
+
+    public void renderTri(ShapeRenderer batch){
+        batch.triangle((float)(14*Math.sqrt(2)*Math.cos(triangle.getAngle() + 5*Math.PI/4f))+triangle.getPosition().x, (float)(14*Math.sqrt(2)*Math.sin(triangle.getAngle() + 5*Math.PI/4f))+triangle.getPosition().y,
+                (float)(14*Math.cos(triangle.getAngle() + Math.PI/2f))+triangle.getPosition().x, (float)(14*Math.sin(triangle.getAngle() + Math.PI/2f))+triangle.getPosition().y,
+                (float)(14*Math.sqrt(2)*Math.cos(triangle.getAngle() - Math.PI/4f))+triangle.getPosition().x, (float)(14*Math.sqrt(2)*Math.sin(triangle.getAngle() -  Math.PI/4f))+triangle.getPosition().y);
+    }
 
 
 	public Vector2 getLoc() {
