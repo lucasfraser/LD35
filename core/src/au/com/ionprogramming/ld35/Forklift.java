@@ -20,12 +20,9 @@ public class Forklift {
     protected Body bodyFront;
     protected Body forkBody;
     protected Body bodyBack;
+    protected Body triangle;
     protected TextureRegion tex;
     protected RevoluteJointDef revFront;
-
-    public void setForkAngle(float forkAngle) {
-        this.forkAngle = forkAngle;
-    }
 
     protected float forkAngle;
 
@@ -46,6 +43,9 @@ public class Forklift {
         PolygonShape forkShape = new PolygonShape();
         forkShape.setAsBox(15, 3, new Vector2(15, 0), 0);
 
+        PolygonShape tri = new PolygonShape();
+        tri.set(new float[]{-14, -14, 0, 14, 14, -14});
+
 		CircleShape wheel = new CircleShape();
 		wheel.setRadius(width/8);
 
@@ -61,9 +61,10 @@ public class Forklift {
 		bodyDefBack.position.set(loc.x + width/2 , loc.y + height / 2);
 		bodyDefBack.type = BodyDef.BodyType.DynamicBody;
 
-        BodyDef bodyDefFork = new BodyDef();
-        bodyDefFork.position.set(loc.x + width/2 , loc.y + height / 2);
-        bodyDefFork.type = BodyDef.BodyType.KinematicBody;
+
+        BodyDef bodyDefTri = new BodyDef();
+        bodyDefTri.position.set(100, 620);
+        bodyDefTri.type = BodyDef.BodyType.DynamicBody;
 
 //        bodyDefFork.gravityScale = 0;
 
@@ -73,18 +74,25 @@ public class Forklift {
 		fixtureDef.friction = 0.8f;
 		fixtureDef.restitution = 0.01f;
 
-		FixtureDef fixtureDefWheel = new FixtureDef();
-		fixtureDefWheel.shape = wheel;
-		fixtureDefWheel.density =10f;
-		fixtureDefWheel.friction = 100f;
-		fixtureDefWheel.restitution = 0.01f;
+        FixtureDef fixtureDefWheel = new FixtureDef();
+        fixtureDefWheel.shape = wheel;
+        fixtureDefWheel.density =10f;
+        fixtureDefWheel.friction = 100f;
+        fixtureDefWheel.restitution = 0.01f;
+
+        FixtureDef fixtureDefTri = new FixtureDef();
+        fixtureDefTri.shape = tri;
+        fixtureDefTri.density = 10000f;
+        fixtureDefTri.friction = 1000f;
+        fixtureDefTri.restitution = 0.01f;
+        fixtureDefTri.filter.categoryBits = 0x0002; //i am a triangle
 
         FixtureDef fixtureDefForks = new FixtureDef();
         fixtureDefForks.shape = forkShape;
-        fixtureDefForks.density = 1f;
-        fixtureDefForks.friction = 100f;
+        fixtureDefForks.density = 200f;
+        fixtureDefForks.friction = 1000f;
         fixtureDefForks.restitution = 0.01f;
-        fixtureDefForks.filter.maskBits = 0x0000;
+        fixtureDefForks.filter.maskBits = 0x0002;//i will collide with triangles
 
 		body = world.createBody(bodyDef);
 		bodyFront = world.createBody(bodyDefFront);
@@ -93,8 +101,15 @@ public class Forklift {
 		bodyFront.createFixture(fixtureDefWheel);
 		bodyBack.createFixture(fixtureDefWheel);
 
+        BodyDef bodyDefFork = new BodyDef();
+        bodyDefFork.position.set(body.getPosition().x + 32*(float)(Math.sqrt(2)*Math.cos(body.getAngle()+Math.PI/4)) , body.getPosition().y + 32*(float)(Math.sqrt(2)*Math.sin(body.getAngle()+Math.PI/4)));
+        bodyDefFork.type = BodyDef.BodyType.KinematicBody;
+
         forkBody = world.createBody(bodyDefFork);
         forkBody.createFixture(fixtureDefForks);
+
+        triangle = world.createBody(bodyDefTri);
+        triangle.createFixture(fixtureDefTri);
 
 		revFront = new RevoluteJointDef();
 		revFront.collideConnected = false;
@@ -133,24 +148,24 @@ public class Forklift {
         loc = body.getPosition();
 
         if(Gdx.input.isKeyPressed(Input.Keys.A)){
-            bodyFront.applyAngularImpulse(400000, true);
-            bodyBack.applyAngularImpulse(400000, true);
+            bodyFront.applyAngularImpulse(40000, true);
+            bodyBack.applyAngularImpulse(40000, true);
         }
         else if(Gdx.input.isKeyPressed(Input.Keys.D)){
-            bodyFront.applyAngularImpulse(-400000, true);
-            bodyBack.applyAngularImpulse(-400000, true);
+            bodyFront.applyAngularImpulse(-40000, true);
+            bodyBack.applyAngularImpulse(-40000, true);
         }
         else if(Gdx.input.isKeyPressed(Input.Keys.Q)){
-            bodyFront.applyAngularImpulse(8000000, true);
-            bodyBack.applyAngularImpulse(8000000, true);
+            bodyFront.applyAngularImpulse(800000, true);
+            bodyBack.applyAngularImpulse(800000, true);
         }
         else if(Gdx.input.isKeyPressed(Input.Keys.E)){
-            bodyFront.applyAngularImpulse(-8000000, true);
-            bodyBack.applyAngularImpulse(-8000000, true);
+            bodyFront.applyAngularImpulse(-800000, true);
+            bodyBack.applyAngularImpulse(-800000, true);
         }
 		else{
-            bodyFront.setAngularVelocity(0);
-            bodyBack.setAngularVelocity(0);
+//            bodyFront.setAngularVelocity(0);
+//            bodyBack.setAngularVelocity(0);
 		}
 
         if(Gdx.input.isKeyPressed(Input.Keys.UP) && forkAngle < Math.PI/2){
@@ -160,7 +175,7 @@ public class Forklift {
             forkAngle -= 0.02f;
         }
         forkBody.setTransform(body.getPosition().x + 32*(float)(Math.sqrt(2)*Math.cos(body.getAngle()+Math.PI/4)) , body.getPosition().y + 32*(float)(Math.sqrt(2)*Math.sin(body.getAngle()+Math.PI/4)), forkAngle + body.getAngle());
-
+        forkBody.setLinearVelocity(body.getLinearVelocity());
 
         if(body.getPosition().x < 32){
             body.setTransform(new Vector2(32, body.getPosition().y), body.getAngle());
@@ -171,6 +186,10 @@ public class Forklift {
         }
 
         Game.levelPercent = (body.getPosition().x-32) / (Gdx.graphics.getWidth()-64);
+
+        if(Gdx.input.isKeyPressed(Input.Keys.R)){
+            Game.initLevel();
+        }
 
     }
 

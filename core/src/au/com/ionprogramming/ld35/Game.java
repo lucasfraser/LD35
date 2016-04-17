@@ -72,9 +72,11 @@ public class Game extends ApplicationAdapter {
         }
         else{
 
-            Gdx.gl.glClearColor(0.8f, 0.1f, 0.1f, 1);
+            Gdx.gl.glClearColor(0.1f, 0.1f, 0.4f, 1);
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
+            batch.begin();
+            batch.draw(Images.bg, 0, 0);
+            batch.end();
             terrain.render();
             logic.update(physics.getWorld());
 
@@ -83,7 +85,7 @@ public class Game extends ApplicationAdapter {
             batch.end();
 
             lighting.render(batch, logic);
-//            physics.render(batch);
+            physics.render(batch);
 
             physics.doPhysicsStep(Gdx.graphics.getDeltaTime());
         }
