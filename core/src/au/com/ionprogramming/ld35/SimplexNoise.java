@@ -124,7 +124,7 @@ public class SimplexNoise {
         return 70.0 * (n0 + n1 + n2);
     }
 
-    public void generateOctavedSimplexNoise(int xoff, int yoff, int width, int height, int octaves, float roughness, float scale, float[] map){
+    public void generateOctavedSimplexNoise(int xoff, int yoff, int width, int octaves, float roughness, float scale, float[] map){
 
         for(int x = 0; x < width; x++){
                 float layerFrequency = scale;
@@ -141,38 +141,13 @@ public class SimplexNoise {
         }
     }
 
-    public float generateOctavedSimplexNoise(int xoff, int yoff, int octaves, float roughness, float scale){
-        float totalNoise = 0;
-        float layerFrequency = scale;
-        float layerWeight = 1;
-        float weightSum = 0;
-
-        for (int octave = 0; octave < octaves; octave++) {
-            //Calculate single layer/octave of simplex noise, then add it to total noise
-            totalNoise += (float) noise(xoff * layerFrequency, yoff * layerFrequency) * layerWeight;
-
-            //Increase variables with each incrementing octave
-            layerFrequency *= 2;
-            weightSum += layerWeight;
-            layerWeight *= roughness;
-
-        }
-        totalNoise = totalNoise / weightSum;
-
-        return totalNoise;
-    }
-
-    public float generateNoise(int xoff, int yoff){
-        return generateOctavedSimplexNoise(xoff, yoff, octaves, roughness, scale);
-    }
-
-    public float[] generateLevelPoints(int numPoints, float width, float height){
+    public float[] generateLevelPoints(int numPoints, float width, float height, int n){
         float[] data = new float[numPoints];
         float[] levelPoints = new float[numPoints*2 + 4];
-        generateOctavedSimplexNoise(0, 0, numPoints, 1, 8, 0.5f, 0.01f, data);
+        generateOctavedSimplexNoise(1234, 4321, numPoints, octaves, roughness, scale, data);
         for(int x = 0; x < numPoints; x++){
             levelPoints[x*2] = (float)x/(numPoints - 1)*width;
-            levelPoints[x*2 + 1] = (data[x] + 1)/2*height;
+            levelPoints[x*2 + 1] = (float)Math.pow((data[x] + 1)/2, n)*height;
         }
         levelPoints[numPoints*2] = width;
         levelPoints[numPoints*2 + 1] = 0;

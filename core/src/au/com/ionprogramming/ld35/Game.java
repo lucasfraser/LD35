@@ -46,7 +46,7 @@ public class Game extends ApplicationAdapter {
         sound = new SoundHandler();
 //        sound.play("sounds/song1.mp3", true);
 
-        terrain = new Terrain(physics.getWorld());
+        terrain = new Terrain(physics.getWorld(), 50);
     }
 
     @Override

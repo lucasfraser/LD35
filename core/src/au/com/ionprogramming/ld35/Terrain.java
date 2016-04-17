@@ -13,10 +13,10 @@ public class Terrain {
     private SimplexNoise noise;
     private float[] terrainPoints;
 
-    public Terrain(World world){
+    public Terrain(World world, int level){
         shapeRenderer = new ShapeRenderer();
-        noise = new SimplexNoise(5, 0.5f, 0.01f);
-        terrainPoints = noise.generateLevelPoints(100, Gdx.graphics.getWidth(), 400);
+        noise = new SimplexNoise(6, 0.55f, 0.001f*level);
+        terrainPoints = noise.generateLevelPoints(100, Gdx.graphics.getWidth(), 400, 1);
         FixtureDef fixtureDefl = new FixtureDef();
         fixtureDefl.density =10f;
         fixtureDefl.friction = 100f;
