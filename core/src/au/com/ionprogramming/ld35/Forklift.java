@@ -91,10 +91,15 @@ public class Forklift {
         loc = body.getPosition();
         if(Gdx.input.isKeyPressed(Input.Keys.A)){
 			bodyFront.applyAngularImpulse(400000, true);
-
         }
         else if(Gdx.input.isKeyPressed(Input.Keys.D)){
 			bodyFront.applyAngularImpulse(-400000, true);
+        }
+        else if(Gdx.input.isKeyPressed(Input.Keys.Q)){
+            bodyFront.applyAngularImpulse(8000000, true);
+        }
+        else if(Gdx.input.isKeyPressed(Input.Keys.E)){
+            bodyFront.applyAngularImpulse(-8000000, true);
         }
 		else{
             bodyFront.setAngularVelocity(0);
