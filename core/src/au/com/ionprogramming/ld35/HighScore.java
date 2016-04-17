@@ -13,7 +13,7 @@ import java.net.URL;
  */
 public class HighScore {
 
-    public static void addScore(String name, int score) throws IOException {
+    public static void addScore(String name, float score) throws IOException {
         String url = "http://ld.ionprogramming.com.au/ld35/insertscore.php";
         URL obj = new URL(url);
         HttpURLConnection con = (HttpURLConnection) obj.openConnection();

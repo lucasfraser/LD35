@@ -88,6 +88,7 @@ public abstract class Entity {
 	}
 
 	public void update(){
+        loc = body.getPosition();
 	}
 
 	public void render(ShapeRenderer r, SpriteBatch batch){

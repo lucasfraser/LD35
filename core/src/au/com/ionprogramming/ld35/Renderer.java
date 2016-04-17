@@ -15,9 +15,6 @@ public class Renderer {
 
     public static ArrayList<Entity> entities = new ArrayList<Entity>();
 
-    private float camWidth = 8;
-    private float camHeight = 8;
-
     private float borderX = 1;
     private float borderY = 1;
 
@@ -38,7 +35,7 @@ public class Renderer {
 
         float w = Gdx.graphics.getWidth();
         float h = Gdx.graphics.getHeight();
-        cam = new OrthographicCamera(camWidth*(w/h), camHeight);
+        cam = new OrthographicCamera(Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
         cam.position.set(cam.viewportWidth / 2f, cam.viewportHeight / 2f, 0);
         cam.update();
 
@@ -53,7 +50,7 @@ public class Renderer {
 
     public void render(World world){
 
-        setCamPos(logic.getPlayer());
+//        setCamPos(logic.getPlayer());
         cam.update();
 
         Gdx.gl.glClearColor(0.1f, 0.1f, 0.1f, 1);
@@ -114,8 +111,8 @@ public class Renderer {
     }
 
     public void setCamBounds(float width, float height){
-        cam.viewportHeight = camHeight;
-        cam.viewportWidth = camWidth*(width/height);
+        cam.viewportHeight = Gdx.graphics.getWidth();
+        cam.viewportWidth = Gdx.graphics.getWidth()*(width/height);
 
         HUDbatch.getProjectionMatrix().setToOrtho2D(0, 0, width, height);
     }

@@ -12,7 +12,7 @@ public class Logic {
     private Player player;
 
     public Logic(World world, Lighting lighting){
-        player = new Player(true, 0, 0, 1, 1, world, lighting, false, Images.IPL, false);
+        player = new Player(true, 10, 10, 25, 25, world, lighting, false, Images.IPL, false);
 
     }
 
@@ -20,7 +20,8 @@ public class Logic {
 
     public void update(World world){
 
-        System.out.println(getPlayer().getLoc());
+        System.out.println(player.getLoc());
+        player.update();
     }
 
 }
