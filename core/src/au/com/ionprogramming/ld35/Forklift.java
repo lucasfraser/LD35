@@ -15,9 +15,12 @@ public class Forklift {
 	protected Vector2 loc = new Vector2(0, 0);
 	protected Vector2 size;
     protected Body body;
-	protected Body bodyFront;
-	protected TextureRegion tex;
-	protected RevoluteJointDef revFront;
+    protected Body bodyFront;
+    protected Body forkBody;
+    protected Body bodyBack;
+    protected TextureRegion tex;
+    protected RevoluteJointDef revFront;
+    protected RevoluteJointDef forkJoint;
 
 
     public Forklift(float x, float y, float width, float height, World world, Lighting lighting, TextureRegion texture){
@@ -31,6 +34,9 @@ public class Forklift {
 		PolygonShape box = new PolygonShape();
 		box.setAsBox(size.x/2, size.y/2 - 6);
 //		box.set(new float[]{0 - size.x/2, size.y / 6- size.y/2,   0 - size.x/2, -20/*size.y - size.y/2*/,    size.x - size.x/2, -20/*size.y- size.y/2*/,    size.x - size.x/2, size.y/6- size.y/2,     ((size.x / 6) * 5) - size.x/2, 0- size.y/2,      (size.x / 6) - size.x/2, 0- size.y/2     });
+
+        PolygonShape forkShape = new PolygonShape();
+        forkShape.setAsBox(20, 2);
 
 		CircleShape wheel = new CircleShape();
 		wheel.setRadius(width/8);
@@ -47,6 +53,10 @@ public class Forklift {
 		bodyDefBack.position.set(loc.x + width/2 , loc.y + height / 2);
 		bodyDefBack.type = BodyDef.BodyType.DynamicBody;
 
+        BodyDef bodyDefFork = new BodyDef();
+        bodyDefFork.position.set(loc.x + width/2 , loc.y + height / 2);
+        bodyDefFork.type = BodyDef.BodyType.DynamicBody;
+
 		FixtureDef fixtureDef = new FixtureDef();
 		fixtureDef.shape = box;
 		fixtureDef.density = 0.5f;
@@ -59,12 +69,21 @@ public class Forklift {
 		fixtureDefWheel.friction = 100f;
 		fixtureDefWheel.restitution = 0.01f;
 
+        FixtureDef fixtureDefForks = new FixtureDef();
+        fixtureDefForks.shape = forkShape;
+        fixtureDefForks.density = 1f;
+        fixtureDefForks.friction = 100f;
+        fixtureDefForks.restitution = 0.01f;
+
 		body = world.createBody(bodyDef);
 		bodyFront = world.createBody(bodyDefFront);
-		Body bodyBack = world.createBody(bodyDefBack);
+        bodyBack = world.createBody(bodyDefBack);
 		body.createFixture(fixtureDef);
 		bodyFront.createFixture(fixtureDefWheel);
 		bodyBack.createFixture(fixtureDefWheel);
+
+        forkBody = world.createBody(bodyDefFork);
+        forkBody.createFixture(fixtureDefForks);
 
 		revFront = new RevoluteJointDef();
 		revFront.collideConnected = false;
@@ -75,6 +94,13 @@ public class Forklift {
         revFront.lowerAngle = 1;
         revFront.upperAngle = 0;
 
+        forkJoint = new RevoluteJointDef();
+        forkJoint.collideConnected = false;
+        forkJoint.bodyA = body;
+        forkJoint.bodyB = forkBody;
+        forkJoint.localAnchorA.set(size.x/2+2, size.y/2-5);
+        forkJoint.localAnchorB.set(-20, 2);
+
 		RevoluteJointDef revBack = new RevoluteJointDef();
 		revBack.collideConnected = false;
 		revBack.bodyA = body;
@@ -83,23 +109,28 @@ public class Forklift {
 		revBack.localAnchorB.set(bodyBack.getLocalCenter());
 
 		world.createJoint(revFront);
-		world.createJoint(revBack);
+        world.createJoint(revBack);
+        world.createJoint(forkJoint);
     }
 
 
 	public void update(){
         loc = body.getPosition();
         if(Gdx.input.isKeyPressed(Input.Keys.A)){
-			bodyFront.applyAngularImpulse(400000, true);
+            bodyFront.applyAngularImpulse(400000, true);
+            bodyBack.applyAngularImpulse(400000, true);
         }
         else if(Gdx.input.isKeyPressed(Input.Keys.D)){
-			bodyFront.applyAngularImpulse(-400000, true);
+            bodyFront.applyAngularImpulse(-400000, true);
+            bodyBack.applyAngularImpulse(-400000, true);
         }
         else if(Gdx.input.isKeyPressed(Input.Keys.Q)){
             bodyFront.applyAngularImpulse(8000000, true);
+            bodyBack.applyAngularImpulse(8000000, true);
         }
         else if(Gdx.input.isKeyPressed(Input.Keys.E)){
             bodyFront.applyAngularImpulse(-8000000, true);
+            bodyBack.applyAngularImpulse(-8000000, true);
         }
 		else{
             bodyFront.setAngularVelocity(0);

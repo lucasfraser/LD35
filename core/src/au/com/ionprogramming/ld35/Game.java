@@ -75,7 +75,7 @@ public class Game extends ApplicationAdapter {
             batch.end();
 
             lighting.render(batch, logic);
-//            physics.render(batch);
+            physics.render(batch);
 
             physics.doPhysicsStep(Gdx.graphics.getDeltaTime());
         }
