@@ -12,6 +12,11 @@ public class Terrain {
     private ShapeRenderer shapeRenderer;
     private SimplexNoise noise;
     private float[] terrainPoints;
+    private float startHeight = 0;
+
+    public float getStartHeight(){
+        return startHeight;
+    }
 
     public Terrain(World world, int level){
         shapeRenderer = new ShapeRenderer();
@@ -21,7 +26,7 @@ public class Terrain {
         fixtureDefl.density =10f;
         fixtureDefl.friction = 100f;
         fixtureDefl.restitution = 0.01f;
-
+        startHeight = terrainPoints[1];
         for(int x = 0; x < 99; x++){
             PolygonShape p = new PolygonShape();
             p.set(new float[]{terrainPoints[x*2], terrainPoints[x*2 + 1], terrainPoints[x*2 + 2], terrainPoints[x*2 + 3],

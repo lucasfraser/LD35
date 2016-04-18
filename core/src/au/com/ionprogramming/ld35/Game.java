@@ -14,12 +14,6 @@ import java.io.IOException;
 
 public class Game extends ApplicationAdapter {
 
-//      try {
-//			HighScore.addScore("In-Game Test", 99999);
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
-
     private static Physics physics;
     private static Renderer renderer;
     private static Lighting lighting;
@@ -29,7 +23,7 @@ public class Game extends ApplicationAdapter {
     public static int level = 1;
     public static float levelPercent = 0;
 
-    public static boolean INTRO = false;
+    public static boolean INTRO = true;
     public static boolean TITLE_SCREEN = false;
 
     private SpriteBatch batch;
@@ -45,8 +39,6 @@ public class Game extends ApplicationAdapter {
         batch = new SpriteBatch();
         shape = new ShapeRenderer();
 
-
-
 //        sound.play("sounds/song1.mp3", true);
         initLevel();
 
@@ -56,11 +48,11 @@ public class Game extends ApplicationAdapter {
         physics = new Physics();
         physics.getWorld().setContactListener(new DropBall());
         lighting = new Lighting(physics);
-        logic = new Logic(physics.getWorld(), lighting);
+        terrain = new Terrain(physics.getWorld(), level);
+        logic = new Logic(physics.getWorld(), lighting, terrain.getStartHeight() + 4);
         renderer = new Renderer(physics, lighting);
         sound = new SoundHandler();
 
-        terrain = new Terrain(physics.getWorld(), level);
 
 //        logic.getPlayer().body.setTransform(new Vector2(20, 500), 0);
 //        logic.getPlayer().setForkAngle(0);

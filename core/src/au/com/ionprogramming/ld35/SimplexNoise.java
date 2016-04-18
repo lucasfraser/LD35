@@ -147,7 +147,12 @@ public class SimplexNoise {
         generateOctavedSimplexNoise(1234, 4321, numPoints, octaves, roughness, scale, data);
         for(int x = 0; x < numPoints; x++){
             levelPoints[x*2] = (float)x/(numPoints - 1)*width;
-            levelPoints[x*2 + 1] = (float)Math.pow((data[x] + 1)/2, n)*height;
+            if(x < 8){
+                levelPoints[x * 2 + 1] = (float) Math.pow((data[8] + 1) / 2, n) * height;
+            }
+            else {
+                levelPoints[x * 2 + 1] = (float) Math.pow((data[x] + 1) / 2, n) * height;
+            }
         }
         levelPoints[numPoints*2] = width;
         levelPoints[numPoints*2 + 1] = 0;

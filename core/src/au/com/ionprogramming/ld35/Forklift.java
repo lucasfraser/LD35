@@ -55,16 +55,16 @@ public class Forklift {
 		bodyDef.type = BodyDef.BodyType.DynamicBody;
 
 		BodyDef bodyDefFront = new BodyDef();
-		bodyDefFront.position.set(loc.x + width/2 , loc.y + height / 2);
+		bodyDefFront.position.set(loc.x + width/2 + width/3, loc.y + 4);
 		bodyDefFront.type = BodyDef.BodyType.DynamicBody;
 
 		BodyDef bodyDefBack = new BodyDef();
-		bodyDefBack.position.set(loc.x + width/2 , loc.y + height / 2);
+		bodyDefBack.position.set(loc.x + width/2 - width/3, loc.y + 4);
 		bodyDefBack.type = BodyDef.BodyType.DynamicBody;
 
 
         BodyDef bodyDefTri = new BodyDef();
-        bodyDefTri.position.set(100, 620);
+        bodyDefTri.position.set(loc.x + 80, loc.y + 80);
         bodyDefTri.type = BodyDef.BodyType.DynamicBody;
 
 //        bodyDefFork.gravityScale = 0;
@@ -122,17 +122,6 @@ public class Forklift {
         revFront.lowerAngle = 1;
         revFront.upperAngle = 0;
 
-//        forkJoint = new RevoluteJointDef();
-//        forkJoint.collideConnected = false;
-//        forkJoint.bodyA = body;
-//        forkJoint.bodyB = forkBody;
-//        forkJoint.localAnchorA.set(size.x/2+2, size.y/2-5);
-//        forkJoint.localAnchorB.set(-15, 0);
-//        forkJoint.enableLimit = true;
-//        forkJoint.upperAngle = (float)Math.PI/2;
-//        forkJoint.lowerAngle = (float)-Math.PI/2;
-
-
 		RevoluteJointDef revBack = new RevoluteJointDef();
 		revBack.collideConnected = false;
 		revBack.bodyA = body;
@@ -142,7 +131,6 @@ public class Forklift {
 
 		world.createJoint(revFront);
         world.createJoint(revBack);
-//        world.createJoint(forkJoint);
     }
 
 
@@ -178,6 +166,7 @@ public class Forklift {
         }
         forkBody.setTransform(body.getPosition().x + 32*(float)(Math.sqrt(2)*Math.cos(body.getAngle()+Math.PI/4)) , body.getPosition().y + 32*(float)(Math.sqrt(2)*Math.sin(body.getAngle()+Math.PI/4)), forkAngle + body.getAngle());
         forkBody.setLinearVelocity(body.getLinearVelocity());
+        forkBody.setAngularVelocity(body.getAngularVelocity());
 
         if(body.getPosition().x < 32){
             body.setTransform(new Vector2(32, body.getPosition().y), body.getAngle());

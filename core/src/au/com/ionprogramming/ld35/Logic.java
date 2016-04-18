@@ -11,8 +11,8 @@ public class Logic {
 
     private Forklift player;
 
-    public Logic(World world, Lighting lighting){
-        player = new Forklift(20, 500, 64, 64, world, lighting, Images.forkliftRegion);
+    public Logic(World world, Lighting lighting, float startHeight){
+        player = new Forklift(20, startHeight, 64, 64, world, lighting, Images.forkliftRegion);
     }
 
 
